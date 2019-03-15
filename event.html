@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ message }}</h1>
+        <button @click="updateMessage('我是被傳入的文字', $event)">點我換訊息</button>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                message: '這是事件測試頁面'
+            },            
+            methods: {
+                // 預設如果不帶入額外參數，事件e會自動被帶入
+                // 但若有傳入其他自訂義參數，就要將 $event 當作參數傳入
+                updateMessage (txt, e) {
+                    console.log(e.target.tagName)
+                    this.message = txt
+                }
+            }
+        })
+    </script>
+</body>
+</html>

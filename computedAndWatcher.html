@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="example">
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+
+        <p>firstname</p>        
+        <input type="text" v-model="firstname">
+        <p>lastname</p>                
+        <input type="text" v-model="lastname">
+        <p>fullname</p>        
+        <input type="text" v-model="fullname">        
+
+        <p>num1</p>
+        <input type="number" v-model="num1">
+        <p>num2</p>
+        <input type="number" v-model="num2">
+        <p>total</p>
+        <input type="number" v-model="total">
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#example',
+            data: {
+                message: '我的信息',
+                firstname: '',
+                lastname: '',
+                fullname: '',
+                num1: 0,
+                num2: 0,                
+            },
+            computed: {
+                reversedMessage () {
+                    return this.message.split('').reverse().join('')
+                },
+                /* computed預設是get，如果要設定set，要改變為物件型式，set會傳值進去*/
+                total: {                    
+                    get: function () {                        
+                        return Number(this.num1) + Number(this.num2)
+                    },
+                    set: function (newValue) {
+                        this.num1 = Math.floor(Number(newValue) / 2)
+                        this.num2 = Math.floor(Number(newValue) / 2)                        
+                    }                    
+                }
+            },
+            watch: {
+                firstname (newVal, oldVal) {
+                    console.log('new:', newVal, 'old:', oldVal)
+                    this.fullname = newVal + ' ' + this.lastname
+                },
+                lastname (val) {
+                    this.fullname = this.firstname + ' ' + val 
+                }                
+            }
+        })
+    </script>
+</body>
+</html>

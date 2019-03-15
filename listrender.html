@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+    <div id="app">
+        <ul>
+            <!-- 物件也可以用v-for -->
+            <li v-for="(item, key) in obj">{{ key }} : {{ item }}</li>
+        </ul>
+        <button @click="addObj('love', '結語')">增加一個物件屬性</button>
+    </div>
+
+    <script>
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                obj: {
+                    firstname: 'tim',
+                    lastname: 'chen',
+                    age: 26
+                }
+            },
+            methods: {
+                addObj (key, value) {
+                    // 用此方式無法將資料加進vue的響應系統中  ps.陣列同樣必須使用此方法，或是陣列的push, splice...方法
+                        // this.obj[key] = value
+                    this.$set(this.obj, key, value)
+                }
+            }            
+        })    
+    </script>
+</body>
+</html>

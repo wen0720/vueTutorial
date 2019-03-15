@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <style>
+        .red{
+            color: red;
+        }
+        .purple{
+            color: purple;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ message }}</h1>
+        <p>{{ dataFreeze.text }}</p>
+        <input type="text" v-model="dataFreeze.text">
+        <!-- <h2>後來才被加入的data {{ afterCreated }}</h2> -->
+        <h2>用純js寫進來 <span id="afterCreated"></span></h2>
+
+        <!-- Dynamic Arguments -->
+        <!-- 可以動態的去改變監聽的事項，這邊用v-on做範例，v-bind....等也可以 -->
+        <p v-on:[attribute]="changeColor" :class="style">測試文字</p>
+        <button @click="attribute = 'click'">click</button>
+        <button @click="attribute = 'mouseenter'">mouseenter</button>
+    </div>
+    <script>
+        /* 當vue 實例被 created後， 會把所有data中的資料都加進 vue的reactivity system中，
+            當data 中的資料有改變時，同時也會改變view
+            ，必須注意的是，這些資料必須是在created前，就被創建好在data中的，
+            中途加入的property 將不會被納入reactivity system */
+
+        let dataFreeze = { text: '我被凍結了' }
+        Object.freeze(dataFreeze) // 透過此方法，可以停止 vue 本身的 react 特性
+
+        const vm = new Vue({
+            el: '#app',
+            data: {                
+                message: '我是測試文字',
+                dataFreeze,
+                style: {
+                    red: true,
+                    purple: false
+                },
+                attribute: 'click'                      
+            },            
+            methods: {
+                changeColor(){
+                    this.style.red = !this.style.red
+                    this.style.purple = !this.style.purple
+                }
+            }
+        })
+
+        // vm.afterCreated = '我被加入了！！！！！'
+        document.getElementById('afterCreated').textContent = vm.afterCreated 
+
+        // 我們可以透過 vm.$data 取得 vue 中的資料 ps: 有加 ＄ 字號是為了區別官方定義的屬性與自訂義的
+        console.log(vm.$data.message)
+    </script>
+</body>
+</html>

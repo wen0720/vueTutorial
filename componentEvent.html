@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id='#app'>
+
+    </div>
+    <script>
+        // 元件向上傳遞資訊時，要透過 $emit 並自定義事件，
+        // Vue 建議事件名全部都用 Kebab-case ，因為大寫會全部轉為小寫
+
+        const component = {
+            model: {
+
+            },
+            data () {
+                return {
+
+                }
+            },
+            template: `
+                <input 
+                    type="checkbox"
+                    >
+            `
+        }
+
+        const vm = new Vue({
+            el: '#app'
+        })
+
+    </script>
+</body>
+</html>

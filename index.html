@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- vue 與 data 綁定的最基本方式 -->
+        <h1>{{ message }}</h1>
+
+         <!-- 使用 v-bind 將資料寫進 attribute -->
+        <h2 v-bind:title="hover"> 請在我身上停留幾秒中 </h2>
+
+        <!-- 也可以用 data 控制 html 的 render 與否 -->
+        <p v-if="show">你看不到我</p>
+
+        <!-- 用 v-for loop 重複項目 -->
+        <ul>
+            <li v-for="item in loopArr">{{ item }}</li>
+        </ul>
+
+        <!-- v-on 將事件綁定 -->
+        <p>{{ reverseTxt }}</p>
+        <button @click="reverse">翻轉</button>
+
+        <!-- v-model 雙向綁定 -->
+        <p>{{ text }}</p>
+        <input type="text" v-model="text">
+
+        <!-- vue 元件，在 vue 中， 元件其實就是一個有被預設好一些值的 Vue instance -->
+        <component1></component1>
+    </div>
+
+    <script>
+        Vue.component('component1', {
+            data(){
+                return {
+                    text: '我是元件'
+                }
+            },
+            template: `<div style="margin-top: 20px;background-color:#aaa;color:#fff;">{{ text }}</div>`
+        })
+
+        const vm = new Vue({
+            el: '#app',
+            data: {                
+                message: '我是測試文字',
+                hover: `你在${new Date().toLocaleString()}進入此頁面`,
+                show: false,
+                loopArr: [
+                    '學好html',
+                    '學好css',
+                    '學好js',
+                    '學好Vue.js',                    
+                ],
+                reverseTxt: '我們將這句話翻轉過來',
+                text: '預設文字'
+            },
+            methods: {
+                reverse(){
+                    this.reverseTxt = this.reverseTxt.split('').reverse().join('')
+                }
+            }
+        })
+    </script>
+</body>
+</html>

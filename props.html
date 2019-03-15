@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+        .margin{
+            margin: 30px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <component1 :title="titleProp"></component1>
+    </div>
+
+    <script>
+        const component1 = {            
+            data() {
+                return {
+                    text: '我的元件',                    
+                    // myTitle: this.title // 這個作法，其實 this.myTitle === this.title ， 連由父元件傳來的 titleProp 都會被改掉
+                }
+            },
+            props: {
+                title: {
+                    type: Object,
+
+                    default () {
+                        return {
+                            title: 'default'
+                        }
+                    }, // prop 傳進來有誤的時候，記得如果要是 obj 或 arr 要用 function return 回來
+
+                    validator (value) {
+                        return typeof value === 'object'
+                    }  // 在data, computed ... 被 created 之前， prop 就會執行 validator, default，所以 data, computed 在這些函數中是不可使用的
+                }
+            },
+            template: `<div>
+                        <div>{{ text }}</div>
+                        <p>{{ title.title }}</p>
+                       </div>
+                        `,
+            created () {
+                // console.log(this.myTitle)
+                // console.log(this.myTitle === this.title)                
+            }
+        }
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                example: {
+                    class: 'tiger',
+                    amount: 30,                                    
+                },
+                titleProp: {
+                    title: 'i am title',
+                    subtitle: 'i am subtitle'
+                }
+            },
+            components: {
+                component1
+            }
+        })
+    </script>
+
+    <!-- 關於單向資料流
+        prop 主要應用於父元件傳遞資料給子元件，同時如果父元件的資料有更新，也會觸發子元件prop資料的更新，
+        但子元件的資料異動，不會向上影響父元件的資料，這是為了避免資資料流混雜而難以被理解。
+     -->
+</body>
+</html>
