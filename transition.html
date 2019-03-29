@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue"></script>
+    <style>
+        .buttonbox{
+            margin: 10px;
+        }
+        .buttonbox button{
+            /* position: absolute; */
+        }
+        .fade-enter-active, .fade-leave-active{
+            transition: opacity 2s;            
+        }
+        .fade-enter, .fade-leave-to{
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <button v-on:click="show = !show">Toggle</button>
+        <!-- 若不加 transition 的 name  -->
+        <!-- <transition name="fade"
+            v-on:before-enter="beforeEnter"
+            v-on:enter="enter"
+            v-on:after-enter="afterEnter"
+            v-on:enter-cancelled="enterCancelled">  
+            <p v-if="show">hello</p>
+        </transition> -->
+        <div class="buttonbox">
+            <!-- 如果沒有加 mode="out-in" 的話 淡入的元素和淡出的元素，會同時執行，導致兩個元素出現同時存在的情況-->
+            <transition name="fade" mode="out-in">
+                <button v-if="show" key="first">第一個按鈕</button>
+                <button v-else key="second">第二個按鈕</button>            
+            </transition>
+        </div>
+        <transition name="fade" mode="out-in">
+                <component :is="view"></component>
+        </transition>        
+        <button @click=" view = view === 'first' ? 'second' : 'first' ">轉換元件</button>
+    </div>
+
+    <script>        
+
+        const component1 = {
+            data () {
+                return {
+                    text: '我的元件'
+                }
+            },
+            template: `<h1> {{ text }}
+                </h1>
+            `
+        }
+
+        const component2 = {
+            data () {
+                return {
+                    text: '我的元件2'
+                }
+            },
+            template: `<h1> {{ text }}
+                </h1>
+            `
+        }
+
+        const vm = new Vue({
+            el: '#app',
+            data: {
+                show: true,
+                items: [],
+                view: 'first' 
+            },
+            methods: {
+                beforeEnter: function(el) {
+                    alert('beforeEnter')
+                },
+                enter: function (el){
+                    alert('enter')
+                },
+                afterEnter: function (el) {
+                    alert('afterEnter')
+                },
+                enterCancelled: function (el) {
+                    alert('enterCancelled')
+                }
+            },
+            components: {
+                'first': component1,
+                'second': component2
+            }            
+        })
+    </script>    
+</body>
+</html>
