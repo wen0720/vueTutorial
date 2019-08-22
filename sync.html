@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>{{ text }}</h1>
+        <!-- <compoment1 :title.sync="title"></compoment1> -->
+        <compoment1 :title="title" @update:title="val => title=val"></compoment1>
+        <!-- 
+            等效於
+            <compoment1 :title="title" @update:title="val => title=val"></compoment1>
+            或是
+            <compoment1 :title="title" @update:title="changeTime"></compoment1>
+         -->
+    </div>
+
+    <script>
+        let compoment1 = {
+            name: 'compoment1',
+            props: ['title'],
+            data () {
+                return {
+                    componentTxt: '元件文字'
+                }
+            },
+            methods: {
+                changePropTxt () {
+                    this.$emit('update:title', '我是被修改的 prop title')
+                    // this.title = '我是被修改的 prop title'                    
+                }
+            },
+            template: `
+                <div>
+                    <h1>{{ componentTxt }}</h1>
+                    <p>{{title}}</p>
+                    <button @click="changePropTxt">改變文字</button>
+                </div>
+            `
+        }
+
+        new Vue({
+            el: '#app',
+            data: {
+                text: '文字',
+                title: '我是prop的title'
+            },
+            components: {
+                compoment1
+            },
+            // methods: {
+            //     changeTime(val) {
+            //         this.title = val
+            //     }
+            // }
+        })
+    </script>
+</body>
+</html>
