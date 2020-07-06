@@ -23,7 +23,7 @@
         <div class="margin">
             <p>textarea</p>
             <textarea v-model="textarea" cols="30" rows="10" placeholder="預設文字"></textarea>
-        </div>        
+        </div>
         <div class="margin">
             <p>checkbox</p>
             <label for="check">{{ checked }}</label>
@@ -43,7 +43,7 @@
             <input type="radio" id="name" v-model="radioChecked" value="tim">
             <label for="name2">jack</label>
             <input type="radio" id="name2" v-model="radioChecked" value="jack">
-        </div>        
+        </div>
         <div class="margin">
             <p>select</p>
             <select v-model="selected">
@@ -52,7 +52,7 @@
                 <option value="B">B</option>
                 <option value="C">C</option>
             </select>
-        </div>        
+        </div>
 
         <!-- 對於值的綁定，以radio為例，值可以不再是true或false，而是對應到綁定的data，其實上面有案例，但不是透過v-bind寫在data裡 -->
 
@@ -67,15 +67,71 @@
         <div class="margin">
             <p>checkbox bind</p>
             <label for="checkbox">check1</label>
-            <input type="checkbox" id="checkbox" v-model="valueCheckbox" 
-                true-value="yes"
+            <input type="checkbox" id="checkbox" v-model="valueCheckbox"
+                true-value="ye1s"
                 false-value="no"
             >
         </div>
 
+        <!-- v-slot 就是把 component 內部的 data 能對外部暴露的一個管道 -->
+        <card-component v-slot:default="slotProps">
+            <div>
+                {{ slotProps.text }}
+                {{ slotProps.count }}
+            </div>
+        </card-component>
+
+        <test :level="2">
+            12345
+        </test>
     </div>
 
     <script>
+         Vue.component('CardComponent', {
+            data() {
+                return {
+                    text: '我是 card 文字',
+                    count: 9999
+                }
+            },
+            template: `
+                <div class="card">
+                    <div class="card-body">
+                        <slot
+                            :text="text"
+                            :count="count" />
+                    </div>
+                </div>
+            `
+        })
+
+        Vue.component('Test', {
+            props: {
+                level: {
+                    type: Number,
+                    default: 1
+                }
+            },
+            computed: {
+                tag() {
+                    const tag = `h${this.level}`
+                    console.log(tag)
+                    return `h${this.level}`
+                }
+            },
+            // template: `
+            //     <component :is="tag">
+            //         <slot />
+            //     </component>
+            // `
+            render(createElement) {
+                return createElement(
+                    `h${this.level}`,
+                    this.$slots.default
+                )
+            }
+        })
+
         const vm = new Vue({
             el: '#app',
             data: {
@@ -88,7 +144,7 @@
                 valueRadio: false,
                 valueBind: { value: true },
                 valueCheckbox: false
-            },            
+            },
             methods: {
 
             }
